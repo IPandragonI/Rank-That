@@ -6,6 +6,7 @@ import fr.esgi.tierlist.domain.port.UserDatasourcePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,6 +14,10 @@ import java.util.Optional;
 public class UserService {
 
     private final UserDatasourcePort userDatasourcePort;
+
+    public List<User> findAll() {
+        return userDatasourcePort.findAll();
+    }
 
     public User findById(Long id) {
         return userDatasourcePort.findById(id).orElse(null);

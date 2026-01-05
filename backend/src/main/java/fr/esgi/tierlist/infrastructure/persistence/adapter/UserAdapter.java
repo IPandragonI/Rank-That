@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,6 +18,11 @@ import java.util.Optional;
 public class UserAdapter implements UserDatasourcePort {
 
     private final UserRepository userRepository;
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll().stream().map(UserMapper::toDomain).toList();
+    }
 
     @Override
     public Optional<User> findById(Long id) {

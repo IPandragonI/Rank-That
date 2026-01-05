@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@Table(name = "tier_lists")
 @Getter
 @Setter
 @ToString
