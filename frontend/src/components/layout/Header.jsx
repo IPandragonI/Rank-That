@@ -26,7 +26,7 @@ const Header = () => {
                 </div>
                 <Link to="/" className="flex items-center">
                     <img src="/icon.png" alt="Logo" className="w-8 h-8 inline-block"/>
-                    <a className="btn btn-ghost normal-case text-xl">Rank That</a>
+                    <span className="btn btn-ghost normal-case text-xl">Rank That</span>
                 </Link>
             </div>
             <div className="navbar-center hidden lg:flex">
