@@ -153,11 +153,12 @@ const LoginPage = () => {
 
                         <div className="relative mx-auto max-w-xs">
                             <div className="w-full h-64 rounded-2xl overflow-hidden shadow-2xl">
-                                <div className="w-full h-full bg-linear-to-br from-blue-400 to-purple-500 flex items-center justify-center">
-                                    <div className="text-center">
-                                        <div className="text-5xl mb-4">✨</div>
-                                        <p className="font-semibold">Votre image ici</p>
-                                    </div>
+                                <div className="w-full h-full bg-linear-to-br bg-white flex items-center justify-center">
+                                    <img
+                                        src="/logo.png"
+                                        alt="Rank That Logo"
+                                        className="w-32 h-32 object-contain animate-pulse"
+                                    />
                                 </div>
                             </div>
                         </div>
