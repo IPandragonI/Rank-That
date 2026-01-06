@@ -39,6 +39,10 @@ public class TierListService {
         return tierListDatasourcePort.findById(id).orElse(null);
     }
 
+    public TierList findByCreatorId(Long creatorId) {
+        return tierListDatasourcePort.findByCreatorId(creatorId).orElse(null);
+    }
+
     public TierList update(Long id, TierListForm tierListForm) {
         Optional<TierList> optionalTierList = tierListDatasourcePort.findById(id);
         if (optionalTierList.isEmpty()) {

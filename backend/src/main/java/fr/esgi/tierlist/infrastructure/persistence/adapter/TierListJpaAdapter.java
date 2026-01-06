@@ -23,6 +23,11 @@ public class TierListJpaAdapter implements TierListDatasourcePort {
     }
 
     @Override
+    public Optional<TierList> findByCreatorId(Long creatorId) {
+        return tierListRepository.findByCreatorId(creatorId).map(TierListMapper::toDomain);
+    }
+
+    @Override
     public TierList save(TierList tierList) {
         var tierListEntity = TierListMapper.toEntity(tierList);
         var savedEntity = tierListRepository.save(tierListEntity);

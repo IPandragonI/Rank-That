@@ -32,6 +32,14 @@ public class TierListController {
         return TierListDto.transfer(tierList);
     }
 
+    @GetMapping("/creator/{creatorId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Find Tier List by user ID")
+    public TierListDto findByCreatorId(@PathVariable Long creatorId) {
+        TierList tierList = tierListService.findByCreatorId(creatorId);
+        return TierListDto.transfer(tierList);
+    }
+
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Update Tier List by ID")
