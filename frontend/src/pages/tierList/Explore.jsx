@@ -218,66 +218,6 @@ const ExplorePage = () => {
                             </p>
                         </div>
                     )}
-
-                    {filteredItems && filteredItems.length > 0 && (
-                        <div className="text-center mt-10">
-                            <button className="btn btn-outline btn-primary px-8 rounded-xl">
-                                Voir plus de classements
-                            </button>
-                        </div>
-                    )}
-                </div>
-
-                <div className="mt-16">
-                    <h3 className="text-2xl font-bold text-gray-800 mb-6">Tendances du moment</h3>
-                    <div className="bg-linear-to-r from-blue-50 to-purple-50 rounded-2xl p-6">
-                        <div className="flex flex-col md:flex-row gap-6">
-                            <div className="md:w-1/3">
-                                <div className="bg-white rounded-xl p-5 shadow">
-                                    <div className="flex items-center mb-4">
-                                        <div className="p-2 bg-red-100 rounded-lg mr-3">
-                                            <FaFire className="text-red-500" />
-                                        </div>
-                                        <h4 className="font-bold text-lg">Classement du jour</h4>
-                                    </div>
-                                    <p className="text-gray-600 mb-4">
-                                        "Top 10 des films de science-fiction 2024"
-                                    </p>
-                                    <div className="flex items-center">
-                                        <div className="avatar-group -space-x-4 mr-3">
-                                            {[1, 2, 3].map((i) => (
-                                                <div key={i} className="avatar">
-                                                    <div className="w-8 h-8">
-                                                        <img
-                                                            src={`https://i.pravatar.cc/150?img=${i}`}
-                                                            alt={`User ${i}`}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <span className="text-sm text-gray-500">+120 votes aujourd'hui</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="md:w-2/3">
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                    {['Trend #1', 'Trend #2', 'Trend #3'].map((trend, i) => (
-                                        <div key={i} className="bg-white rounded-xl p-4 shadow hover:shadow-md transition-shadow">
-                                            <div className="flex items-center justify-between mb-2">
-                                                <span className="font-bold text-gray-700">{trend}</span>
-                                                <span className="text-xs px-2 py-1 bg-blue-100 text-blue-600 rounded-full">
-                                                    {i + 1}
-                                                </span>
-                                            </div>
-                                            <p className="text-sm text-gray-500">Explore this trending list</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 

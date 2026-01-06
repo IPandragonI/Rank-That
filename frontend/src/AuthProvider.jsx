@@ -7,7 +7,7 @@ export const AuthProvider = ({children, pollInterval = 1000}) => {
     const getTokenFromStorage = () => window.localStorage.getItem('token');
 
     const [token, setTokenState] = useState(getTokenFromStorage());
-    const [username, setUsername] = useState(localStorage.getItem('username'));
+    const [currentUser, setCurrentUser] = useState(window.localStorage.getItem('user'));
     const [isAuthenticated, setIsAuthenticated] = useState(Boolean(getTokenFromStorage()));
 
     const applyToken = useCallback((newToken) => {
@@ -18,24 +18,24 @@ export const AuthProvider = ({children, pollInterval = 1000}) => {
     const setAuthData = useCallback((auth) => {
         if (!auth) {
             window.localStorage.removeItem('token');
-            window.localStorage.removeItem('refreshToken');
-            window.localStorage.removeItem('username');
+            window.localStorage.removeItem('currentUser');
             applyToken(null);
             window.location = '/auth/login';
-            toast('You have been logged out.', {type: 'info'});
+            toast('Vous avez été déconnecté.', { type: 'info' });
             return;
         }
 
-        const {token: newToken, refreshToken, username} = auth;
+        const newToken = typeof auth === 'string' ? auth : (auth.token ?? null);
+        const userObj = typeof auth === 'object' ? (auth.user ?? null) : null;
+        const providedUsername = userObj?.currentUser ?? auth.currentUser ?? null;
+
         if (newToken) {
             window.localStorage.setItem('token', newToken);
-            if (refreshToken) window.localStorage.setItem('refreshToken', refreshToken);
-            if (username) window.localStorage.setItem('username', username);
+            if (providedUsername) window.localStorage.setItem('currentUser', providedUsername);
             applyToken(newToken);
         } else {
             window.localStorage.removeItem('token');
-            window.localStorage.removeItem('refreshToken');
-            window.localStorage.removeItem('username');
+            window.localStorage.removeItem('currentUser');
             applyToken(null);
         }
     }, [applyToken]);
@@ -48,6 +48,9 @@ export const AuthProvider = ({children, pollInterval = 1000}) => {
         const onStorage = (e) => {
             if (e.key === 'token') {
                 applyToken(e.newValue);
+            }
+            if (e.key === 'currentUser') {
+                setCurrentUser(e.newValue);
             }
         };
         window.addEventListener('storage', onStorage);
@@ -75,8 +78,7 @@ export const AuthProvider = ({children, pollInterval = 1000}) => {
     }, [applyToken, pollInterval]);
 
     useEffect(() => {
-        const rolesStr = window.localStorage.getItem('roles');
-        setUsername(window.localStorage.getItem('username'));
+        setCurrentUser(window.localStorage.getItem('currentUser'));
     }, [token]);
 
     const value = {
@@ -84,7 +86,7 @@ export const AuthProvider = ({children, pollInterval = 1000}) => {
         isAuthenticated,
         setAuthData,
         logout,
-        username,
+        currentUser,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

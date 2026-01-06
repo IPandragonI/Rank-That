@@ -10,4 +10,10 @@ const Urls = {
     }
 }
 
+const BASE_URL = 'http://localhost:3000';
+
+Urls.getFullUrl = function(path) {
+    return BASE_URL + path;
+}
+
 export default Urls;

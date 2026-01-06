@@ -1,52 +1,63 @@
-import React, { useState } from 'react';
-import {
-    FaUser,
-    FaEnvelope,
-    FaLock,
-    FaEye,
-    FaEyeSlash,
-    FaSignInAlt,
-    FaArrowLeft,
-    FaStar,
-    FaRocket
-} from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import React, {useState} from 'react';
+import {FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash, FaSignInAlt} from 'react-icons/fa';
+import {Link, useNavigate} from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Urls from '../../api/Urls';
+import { useAuth } from '../../AuthProvider';
 
 const RegisterPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [formData, setFormData] = useState({
+        lastname: '',
+        firstname: '',
         username: '',
         email: '',
         password: '',
         confirmPassword: '',
-        acceptTerms: false
     });
+    const { setAuthData } = useAuth();
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (formData.password !== formData.confirmPassword) {
-            alert('Les mots de passe ne correspondent pas');
+            toast.error('Les mots de passe ne correspondent pas');
             return;
         }
-        if (!formData.acceptTerms) {
-            alert('Veuillez accepter les conditions d\'utilisation');
-            return;
+        try {
+            const payload = {
+                username: formData.username,
+                email: formData.email,
+                password: formData.password,
+                firstname: formData.firstname,
+                lastname: formData.lastname
+            };
+            const res = await fetch(Urls.getFullUrl(Urls.auth.register), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.message || 'Échec de l\'inscription');
+            }
+            const data = await res.json();
+            const authPayload = {
+                token: data.token,
+                currentUser: data.currentUser
+            };
+            setAuthData(authPayload);
+            toast.success('Compte créé et connecté');
+            navigate('/');
+        } catch (error) {
+            toast.error(error.message || 'Erreur lors de l\'inscription');
         }
-        console.log('Registration attempt with:', formData);
-        // Ici, vous ajouterez votre logique d'inscription
     };
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : value
-        }));
-    };
-
-    const handleLoginRedirect = () => {
-        window.location.href = '/auth/login';
+        setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
     };
 
     return (
@@ -65,38 +76,6 @@ const RegisterPage = () => {
                             <p className="text-lg text-blue-100">
                                 Créez votre compte pour commencer à organiser, classer et partager vos listes préférées.
                             </p>
-                        </div>
-
-                        <div className="space-y-6 mb-10">
-                            <div className="flex items-center">
-                                <div className="bg-white/20 p-2 rounded-lg mr-4">
-                                    <FaStar className="text-xl text-yellow-300" />
-                                </div>
-                                <div className="text-left">
-                                    <h4 className="font-semibold">Créez des tiers-lists personnalisées</h4>
-                                    <p className="text-blue-100 text-sm">Classifiez tout ce qui vous passionne</p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center">
-                                <div className="bg-white/20 p-2 rounded-lg mr-4">
-                                    <FaUser className="text-xl text-blue-300" />
-                                </div>
-                                <div className="text-left">
-                                    <h4 className="font-semibold">Partagez avec la communauté</h4>
-                                    <p className="text-blue-100 text-sm">Découvrez les classements des autres</p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center">
-                                <div className="bg-white/20 p-2 rounded-lg mr-4">
-                                    <FaRocket className="text-xl text-pink-300" />
-                                </div>
-                                <div className="text-left">
-                                    <h4 className="font-semibold">Accès instantané</h4>
-                                    <p className="text-blue-100 text-sm">Commencez dès maintenant, gratuitement</p>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -163,6 +142,49 @@ const RegisterPage = () => {
                                         placeholder="vous@exemple.com"
                                         required
                                     />
+                                </div>
+                            </div>
+
+                            <div className="flex space-x-4">
+                                <div className="w-1/2">
+                                    <label className="label">
+                                        <span className="label-text font-medium text-gray-700">
+                                            Prénom
+                                        </span>
+                                    </label>
+                                    <div className="relative">
+                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <FaUser className="text-gray-400" />
+                                        </div>
+                                        <input
+                                            type="text"
+                                            name="firstname"
+                                            value={formData.firstname}
+                                            onChange={handleInputChange}
+                                            className="input input-bordered w-full pl-10 pr-4 py-3 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
+                                            placeholder="Votre prénom"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="w-1/2">
+                                    <label className="label">
+                                        <span className="label-text font-medium text-gray-700">
+                                            Nom
+                                        </span>
+                                    </label>
+                                    <div className="relative">
+                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <FaUser className="text-gray-400" />
+                                        </div>
+                                        <input
+                                            type="text"
+                                            name="lastname"
+                                            value={formData.lastname}
+                                            onChange={handleInputChange}
+                                            className="input input-bordered w-full pl-10 pr-4 py-3 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
+                                            placeholder="Votre nom"
+                                        />
+                                    </div>
                                 </div>
                             </div>
 
@@ -255,33 +277,9 @@ const RegisterPage = () => {
                                 )}
                             </div>
 
-                            <div className="bg-gray-50 p-4 rounded-xl">
-                                <label className="cursor-pointer flex items-start">
-                                    <input
-                                        type="checkbox"
-                                        name="acceptTerms"
-                                        checked={formData.acceptTerms}
-                                        onChange={handleInputChange}
-                                        className="checkbox checkbox-primary checkbox-sm mt-1"
-                                    />
-                                    <span className="ml-3 text-sm text-gray-700">
-                                        J'accepte les{' '}
-                                        <a href="#" className="text-green-600 hover:text-green-800 font-medium transition-colors">
-                                            Conditions d'utilisation
-                                        </a>
-                                        {' '}et la{' '}
-                                        <a href="#" className="text-green-600 hover:text-green-800 font-medium transition-colors">
-                                            Politique de confidentialité
-                                        </a>
-                                        {' '}de Rank That. *
-                                    </span>
-                                </label>
-                            </div>
-
                             <button
                                 type="submit"
                                 className="btn btn-success w-full py-3 rounded-xl text-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 bg-gradient-to-r from-green-500 to-blue-600 border-none"
-                                disabled={!formData.acceptTerms}
                             >
                                 Créer mon compte
                                 <FaSignInAlt className="ml-2" />

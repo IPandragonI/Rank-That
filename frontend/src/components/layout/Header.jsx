@@ -7,55 +7,14 @@ const Header = () => {
     const {isAuthenticated, user, logout} = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
-    const [searchQuery, setSearchQuery] = useState("");
     const [showUserMenu, setShowUserMenu] = useState(false);
-    const [showNotifications, setShowNotifications] = useState(false);
-    const [notifications, setNotifications] = useState([]);
     const userMenuRef = useRef(null);
-    const notificationsRef = useRef(null);
-
-    // Mock notifications data
-    useEffect(() => {
-        if (isAuthenticated) {
-            setNotifications([
-                {id: 1, text: "Votre tier list a reçu 15 likes", time: "2h", read: false},
-                {id: 2, text: "@gamer_pro a commenté votre liste", time: "1j", read: false},
-                {id: 3, text: "Nouveau follower: @movie_lover", time: "2j", read: true},
-                {id: 4, text: "Votre liste est dans les tendances", time: "3j", read: true},
-            ]);
-        }
-    }, [isAuthenticated]);
-
-    // Close dropdowns when clicking outside
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
-                setShowUserMenu(false);
-            }
-            if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
-                setShowNotifications(false);
-            }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
-
-    const handleSearch = (e) => {
-        e.preventDefault();
-        if (searchQuery.trim()) {
-            navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
-            setSearchQuery("");
-        }
-    };
 
     const handleLogout = () => {
         logout();
         setShowUserMenu(false);
         navigate("/");
     };
-
-    const unreadNotifications = notifications.filter(n => !n.read).length;
 
     const navLinks = [
         {path: "/", label: "Home", icon: <FaHome/>},
@@ -132,60 +91,6 @@ const Header = () => {
                                 >
                                     <FaPlus/>
                                 </Link>
-
-                                <Link
-                                    to="/tierlist/new"
-                                    className="hidden lg:flex btn btn-primary gap-2 rounded-full px-6 hover:shadow-lg transition-shadow"
-                                >
-                                    <FaPlus/>
-                                    <span>Créer</span>
-                                </Link>
-
-                                <div className="relative" ref={notificationsRef}>
-                                    <button
-                                        onClick={() => setShowNotifications(!showNotifications)}
-                                        className="btn btn-ghost btn-circle relative"
-                                    >
-                                        <FaBell size={20}/>
-                                        {unreadNotifications > 0 && (
-                                            <span
-                                                className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center animate-pulse">
-                                                {unreadNotifications}
-                                            </span>
-                                        )}
-                                    </button>
-
-                                    {showNotifications && (
-                                        <div
-                                            className="absolute right-0 mt-2 w-80 bg-base-100 rounded-xl shadow-xl border z-50">
-                                            <div className="p-4 border-b">
-                                                <h3 className="font-bold">Notifications</h3>
-                                            </div>
-                                            <div className="max-h-96 overflow-y-auto">
-                                                {notifications.length > 0 ? (
-                                                    <ul className="menu">
-                                                        {notifications.map((notification) => (
-                                                            <li key={notification.id}>
-                                                                <a className={`py-3 ${!notification.read ? 'bg-blue-50' : ''}`}>
-                                                                    <div className="flex justify-between items-start">
-                                                                        <p className="text-sm">{notification.text}</p>
-                                                                        <span
-                                                                            className="text-xs text-gray-500">{notification.time}</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                ) : (
-                                                    <div className="p-8 text-center text-gray-500">
-                                                        <FaBell className="mx-auto text-3xl mb-2 opacity-50"/>
-                                                        <p>Aucune notification</p>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
 
                                 <div className="relative" ref={userMenuRef}>
                                     <button

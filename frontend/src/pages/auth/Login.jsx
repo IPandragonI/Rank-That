@@ -1,25 +1,44 @@
 import React, { useState } from 'react';
-import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaUser, FaSignInAlt } from 'react-icons/fa';
+import { FaLock, FaEye, FaEyeSlash, FaUser, FaSignInAlt } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Urls from '../../api/Urls';
+import { useAuth } from '../../AuthProvider';
 
 const LoginPage = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const [isLoginWithEmail, setIsLoginWithEmail] = useState(true);
-    const [formData, setFormData] = useState({
-        emailOrUsername: '',
-        password: ''
-    });
+    const [formData, setFormData] = useState({ username: '', password: '' });
+    const { setAuthData } = useAuth();
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Login attempt with:', formData);
+        try {
+            const res = await fetch(Urls.getFullUrl(Urls.auth.login), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: formData.username, password: formData.password })
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.message || 'Échec de la connexion');
+            }
+            const data = await res.json();
+            const payload = {
+                token: data.token,
+                currentUser: data.currentUser
+            };
+            setAuthData(payload);
+            toast.success('Connecté');
+            navigate('/');
+        } catch (error) {
+            toast.error(error.message || 'Erreur lors de la connexion');
+        }
     };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        setFormData(prev => ({ ...prev, [name]: value }));
     };
 
     return (
@@ -56,10 +75,10 @@ const LoginPage = () => {
                                     <input
                                         type="text"
                                         name="username"
-                                        value={isLoginWithEmail ? formData.email : formData.username}
+                                        value={formData.username}
                                         onChange={handleInputChange}
                                         className="input input-bordered w-full pl-10 pr-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                                        placeholder={isLoginWithEmail ? "vous@exemple.com" : "votre_nom_utilisateur"}
+                                        placeholder="votre_nom_utilisateur"
                                         required
                                     />
                                 </div>
@@ -96,16 +115,6 @@ const LoginPage = () => {
                                 </div>
                             </div>
 
-                            <div className="flex items-center justify-between">
-                                <label className="cursor-pointer flex items-center">
-                                    <input type="checkbox" className="checkbox checkbox-primary checkbox-sm" />
-                                    <span className="ml-2 text-sm text-gray-600">Se souvenir de moi</span>
-                                </label>
-                                <a href="#" className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors">
-                                    Mot de passe oublié ?
-                                </a>
-                            </div>
-
                             <button
                                 type="submit"
                                 className="btn btn-primary w-full py-3 rounded-xl text-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 bg-linear-to-r from-blue-500 to-purple-600 border-none"
@@ -125,15 +134,6 @@ const LoginPage = () => {
                                 </p>
                             </div>
                         </form>
-
-                        <div className="mt-10 pt-6 border-t border-gray-200">
-                            <p className="text-xs text-gray-500 text-center">
-                                En vous connectant, vous acceptez nos{' '}
-                                <a href="#" className="hover:text-blue-600 transition-colors">Conditions d'utilisation</a>
-                                {' '}et notre{' '}
-                                <a href="#" className="hover:text-blue-600 transition-colors">Politique de confidentialité</a>.
-                            </p>
-                        </div>
                     </div>
                 </div>
 
@@ -149,18 +149,6 @@ const LoginPage = () => {
                             <p className="text-lg text-blue-100">
                                 Connectez-vous partout, à tout moment pour créer vos tiers-lists personnalisés.
                             </p>
-                        </div>
-
-                        <div className="relative mx-auto max-w-xs">
-                            <div className="w-full h-64 rounded-2xl overflow-hidden shadow-2xl">
-                                <div className="w-full h-full bg-linear-to-br bg-white flex items-center justify-center">
-                                    <img
-                                        src="/logo.png"
-                                        alt="Rank That Logo"
-                                        className="w-32 h-32 object-contain animate-pulse"
-                                    />
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
