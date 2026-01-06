@@ -6,6 +6,7 @@ import fr.esgi.tierlist.domain.model.Logo;
 import fr.esgi.tierlist.domain.service.LogoService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +15,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/logos")
 public class LogoController {
     private final LogoService logoService;
-
-    public LogoController(LogoService logoService) {
-        this.logoService = logoService;
-    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

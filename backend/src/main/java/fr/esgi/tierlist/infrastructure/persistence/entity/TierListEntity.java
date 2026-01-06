@@ -39,6 +39,10 @@ public class TierListEntity {
     @ToString.Exclude
     private List<LogoEntity> logos;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private CategoryEntity category;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

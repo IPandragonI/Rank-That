@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="initial-import" author="mathys">
+        <insert tableName="users">
+            <column name="id" valueNumeric="1"/>
+            <column name="lastname" value="TestMan"/>
+            <column name="firstname" value="TestMan"/>
+            <column name="username" value="testman"/>
+            <column name="email" value="testman@mail.com"/>
+            <column name="password" value="$2a$10$7eqJtq98hPqEX7fNZaFWoO5KX6C0j0b8h5rO6j7BtZz3h6k9pH0G6"/>
+            <column name="created_at" valueDate="2026-01-01T00:00:00"/>
+            <column name="updated_at" valueDate="2026-01-01T00:00:00"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" valueNumeric="2"/>
+            <column name="lastname" value="SuperUser"/>
+            <column name="firstname" value="SuperUser"/>
+            <column name="username" value="superuser"/>
+            <column name="email" value="superuser@mail.com"/>
+            <column name="password" value="$2a$10$7eqJtq98hPqEX7fNZaFWoO5KX6C0j0b8h5rO6j7BtZz3h6k9pH0G6"/>
+            <column name="created_at" valueDate="2026-01-01T00:00:00"/>
+            <column name="updated_at" valueDate="2026-01-01T00:00:00"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

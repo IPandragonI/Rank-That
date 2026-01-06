@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 /**
  * DTO for {@link TierList}
  */
-public record TierListDto(Long id, String name, UserDto creator, LocalDateTime createdAt,
+public record TierListDto(Long id, String name, UserDto creator, CategoryDto categoryDto, LocalDateTime createdAt,
                           LocalDateTime updatedAt) implements Serializable {
 
     public static TierListDto transfer(TierList tierList) {
@@ -16,6 +16,7 @@ public record TierListDto(Long id, String name, UserDto creator, LocalDateTime c
                 tierList.getId(),
                 tierList.getName(),
                 UserDto.transfer(tierList.getCreator()),
+                CategoryDto.transfer(tierList.getCategory()),
                 tierList.getCreatedAt(),
                 tierList.getUpdatedAt()
         );

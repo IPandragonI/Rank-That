@@ -22,9 +22,13 @@ public class BeanConfiguration {
                                            LogoDatasourcePort logoDatasourcePort,
                                            LogoProviderPort logoProviderPort,
                                            ObjectStoragePort objectStoragePort,
+                                           CategoryDatasourcePort categoryDatasourcePort,
                                            IAuthenticationFacade authenticationFacade) {
-        return new TierListService(tierListDatasourcePort, columnService(columnDatasourcePort),
-                logoService(logoDatasourcePort, logoProviderPort, objectStoragePort), authenticationFacade);
+        return new TierListService(tierListDatasourcePort,
+                columnService(columnDatasourcePort),
+                logoService(logoDatasourcePort, logoProviderPort, objectStoragePort),
+                categoryService(categoryDatasourcePort),
+                authenticationFacade);
     }
 
     @Bean
@@ -44,13 +48,19 @@ public class BeanConfiguration {
                                                        LogoDatasourcePort logoDatasourcePort,
                                                        LogoProviderPort logoProviderPort,
                                                        ObjectStoragePort objectStoragePort,
+                                                       CategoryDatasourcePort categoryDatasourcePort,
                                                        IAuthenticationFacade authenticationFacade) {
         return new TierListLogoMoveService(tierListLogoDatasourcePort,
-                tierListService(tierListDatasourcePort, columnDatasourcePort, logoDatasourcePort, logoProviderPort, objectStoragePort, authenticationFacade),
+                tierListService(tierListDatasourcePort, columnDatasourcePort, logoDatasourcePort, logoProviderPort, objectStoragePort, categoryDatasourcePort, authenticationFacade),
                 columnService(columnDatasourcePort),
                 logoService(logoDatasourcePort, logoProviderPort, objectStoragePort),
                 authenticationFacade);
     }
+
+     @Bean
+     public CategoryService categoryService(CategoryDatasourcePort categoryDatasourcePort) {
+         return new CategoryService(categoryDatasourcePort);
+     }
 
     @Bean
     public View exportSyntheseTierListsPdfView() {

@@ -12,16 +12,14 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class Column {
+public class Category {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     private String name;
 
-    private TierList tierList;
-
-    private int position;
+    private String description;
 
     private LocalDateTime createdAt;
 

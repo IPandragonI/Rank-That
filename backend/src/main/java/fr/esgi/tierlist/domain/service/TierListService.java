@@ -1,5 +1,6 @@
 package fr.esgi.tierlist.domain.service;
 
+import fr.esgi.tierlist.domain.model.Category;
 import fr.esgi.tierlist.domain.model.Column;
 import fr.esgi.tierlist.domain.model.Logo;
 import fr.esgi.tierlist.domain.model.TierList;
@@ -19,6 +20,7 @@ public class TierListService {
     private final TierListDatasourcePort tierListDatasourcePort;
     private final ColumnService columnService;
     private final LogoService logoService;
+    private final CategoryService categoryService;
     private final IAuthenticationFacade authenticationFacade;
 
     public TierList create(TierListForm tierListform) {
@@ -31,6 +33,11 @@ public class TierListService {
 
         List<Logo> logos = logoService.getOrCreateAll(tierListform.getLogos());
         tierList.setLogos(logos);
+
+        if (tierListform.getCategoryId() != null) {
+            Category category = categoryService.findById(tierListform.getCategoryId());
+            tierList.setCategory(category);
+        }
 
         return tierListDatasourcePort.save(tierList);
     }

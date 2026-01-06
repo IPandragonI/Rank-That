@@ -23,6 +23,8 @@ public class TierList {
 
     private List<Logo> logos;
 
+    private Category category;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

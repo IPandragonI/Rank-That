@@ -17,4 +17,6 @@ public class TierListForm {
 
     @NotEmpty(message = "At least one column is required")
     private List<ColumnForm> columns;
+
+    private Long categoryId;
 }

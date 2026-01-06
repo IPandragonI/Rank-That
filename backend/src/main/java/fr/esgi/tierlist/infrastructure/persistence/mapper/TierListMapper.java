@@ -21,6 +21,7 @@ public record TierListMapper() {
         List<Logo> logo = t.getLogos().stream().map(LogoMapper::toDomain).toList();
         tierList.setLogos(logo);
         tierList.setCreator(UserMapper.toDomain(t.getCreator()));
+        tierList.setCategory(CategoryMapper.toDomain(t.getCategory()));
         tierList.setCreatedAt(t.getCreatedAt());
         tierList.setUpdatedAt(t.getUpdatedAt());
         return tierList;
@@ -36,6 +37,7 @@ public record TierListMapper() {
         List<LogoEntity> logo = t.getLogos().stream().map(LogoMapper::toEntity).toList();
         tierListEntity.setLogos(logo);
         tierListEntity.setCreator(UserMapper.toEntity(t.getCreator()));
+        tierListEntity.setCategory(CategoryMapper.toEntity(t.getCategory()));
         tierListEntity.setCreatedAt(t.getCreatedAt());
         tierListEntity.setUpdatedAt(t.getUpdatedAt());
         return tierListEntity;
