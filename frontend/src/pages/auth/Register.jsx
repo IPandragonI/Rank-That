@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash, FaSignInAlt} from 'react-icons/fa';
 import {Link, useNavigate} from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Urls from '../../api/Urls';
 import { useAuth } from '../../AuthProvider';
 import config from "../../api/apiConfig.js";
 
