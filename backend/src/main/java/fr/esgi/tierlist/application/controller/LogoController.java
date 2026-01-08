@@ -46,6 +46,16 @@ public class LogoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/like/{domain}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Find logos with domain like")
+    public ResponseEntity<List<LogoDto>> findByDomainLike(@PathVariable String domain) {
+        List<LogoDto> logos = logoService.findByDomainLike(domain).stream()
+                .map(LogoDto::transfer)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(logos);
+    }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Find all logos")

@@ -88,6 +88,11 @@ public class LogoService {
         return logoDatasourcePort.findByDomain(normalizedDomain);
     }
 
+    public List<Logo> findByDomainLike(String domain) {
+        String normalizedDomain = normalizeDomain(domain);
+        return logoDatasourcePort.findByDomainLike(normalizedDomain);
+    }
+
     public List<Logo> findAll() {
         return logoDatasourcePort.findAll();
     }

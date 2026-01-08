@@ -30,6 +30,14 @@ public class LogoJpaAdapter implements LogoDatasourcePort {
     }
 
     @Override
+    public List<Logo> findByDomainLike(String domainPattern) {
+        return logoRepository.findByDomainContainingIgnoreCase(domainPattern)
+                .stream()
+                .map(LogoMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Logo> findAll() {
         return logoRepository.findAll()
                 .stream()

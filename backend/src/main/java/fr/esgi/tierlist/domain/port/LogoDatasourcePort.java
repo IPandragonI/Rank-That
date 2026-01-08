@@ -9,6 +9,7 @@ public interface LogoDatasourcePort {
     Logo save(Logo logo);
     Optional<Logo> findById(Long id);
     Optional<Logo> findByDomain(String domain);
+    List<Logo> findByDomainLike(String domainPattern);
     List<Logo> findAll();
     void deleteById(Long id);
     boolean existsByDomain(String domain);
