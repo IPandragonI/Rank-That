@@ -15,22 +15,28 @@ const ExplorePage = () => {
             try {
                 const response = await fetch(`${config.apiBaseUrl}/tier-lists`);
                 const data = await response.json();
-                setTierLists(data);
 
-                const uniqueCategories = [];
-                const categoryMap = new Map();
+                if (response.ok) {
+                    setTierLists(data);
 
-                data.forEach(tierList => {
-                    if (tierList.category && !categoryMap.has(tierList.category.id)) {
-                        categoryMap.set(tierList.category.id, tierList.category);
-                        uniqueCategories.push(tierList.category);
+                    const uniqueCategories = [];
+                    const categoryMap = new Map();
+
+                    data.forEach(tierList => {
+                        if (tierList.category && !categoryMap.has(tierList.category.id)) {
+                            categoryMap.set(tierList.category.id, tierList.category);
+                            uniqueCategories.push(tierList.category);
+                        }
+                    });
+
+                    setCategories(uniqueCategories);
+                    if (uniqueCategories.length > 0) {
+                        setSelectedCategory(uniqueCategories[0].id);
                     }
-                });
-
-                setCategories(uniqueCategories);
-                if (uniqueCategories.length > 0) {
-                    setSelectedCategory(uniqueCategories[0].id);
+                } else {
+                    throw new Error(data.message || 'Failed to fetch tier lists');
                 }
+
             } catch (error) {
                 console.error('Error fetching tier lists:', error);
             }

@@ -140,7 +140,7 @@ const Header = () => {
                                                 </li>
                                                 <li>
                                                     <Link
-                                                        to="/my-tierlists"
+                                                        to="/profile/my-tierlists"
                                                         onClick={() => setShowUserMenu(false)}
                                                         className="flex items-center gap-3 py-3"
                                                     >
