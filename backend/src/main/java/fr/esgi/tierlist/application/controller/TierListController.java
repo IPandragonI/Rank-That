@@ -29,9 +29,9 @@ public class TierListController {
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Find all Tier List")
-    public TierListDto findAll() {
-        TierList tierList = tierListService.findAll();
-        return TierListDto.transfer(tierList);
+    public List<TierListDto> findAll() {
+        List<TierList> tierLists = tierListService.findAll();
+        return tierLists.stream().map(TierListDto::transfer).toList();
     }
 
     @GetMapping("/{id}")
