@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     closestCorners,
     DndContext,
@@ -24,8 +24,36 @@ import {
 } from 'react-icons/fa';
 import GalleryItem from "../../components/tier/Gallery.jsx";
 import Tier from "../../components/tier/Tier.jsx";
+import config from "../../api/apiConfig.js";
+import { useParams } from 'react-router-dom';
 
 const TierListPage = () => {
+    const { id } = useParams();
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetchTierListData();
+    }, []);
+
+    useEffect(() => {
+        setTierListTitle((data?.name + ' -  by ' + data?.creator?.firstname + ' ' + data?.creator?.lastname) || 'Ma Tier List Personnalisée');
+    }, [data]);
+
+    const fetchTierListData = async () => {
+        try {
+            const response = await fetch(`${config.apiBaseUrl}/tier-lists/${id}`, {
+                headers: config.getHeaders(),
+            });
+
+            const result = await response.json();
+            setData(result);
+        }catch (error) {
+
+        } finally {
+            setLoading(false);
+        }
+    }
     const tiers = [
         {id: 's', title: 'S', icon: <FaTrophy className="text-yellow-600"/>, color: 'bg-yellow-400', items: []},
         {id: 'a', title: 'A', icon: <FaStar className="text-red-500"/>, color: 'bg-red-400', items: []},
@@ -166,16 +194,13 @@ const TierListPage = () => {
         const activeIdStr = active.id.toString();
         const overId = over.id.toString();
 
-        // Depuis la galerie vers un tier
         if (activeIdStr.startsWith('gallery-') && overId.match(/^[sabcdef]$/)) {
             const itemId = parseInt(activeIdStr.replace('gallery-', ''));
             const galleryItem = galleryItems.find(item => item.id === itemId);
 
             if (galleryItem) {
-                // Retirer de la galerie
                 setGalleryItems(prev => prev.filter(item => item.id !== itemId));
 
-                // Ajouter au tier avec le même ID
                 setTierData(prev => prev.map(tier =>
                     tier.id === overId
                         ? {...tier, items: [...tier.items, {...galleryItem, id: galleryItem.id.toString()}]}
@@ -183,7 +208,6 @@ const TierListPage = () => {
                 ));
             }
         }
-        // Déplacement entre tiers
         else if (!activeIdStr.startsWith('gallery-') && overId.match(/^[sabcdef]$/)) {
             let sourceTierId = null;
             let draggedItem = null;
@@ -209,7 +233,6 @@ const TierListPage = () => {
                 }));
             }
         }
-        // Réorganisation dans le même tier
         else if (activeIdStr !== overId) {
             const tierId = tierData.find(tier =>
                 tier.items.some(item => item.id === activeIdStr || item.id === overId)
@@ -279,6 +302,14 @@ const TierListPage = () => {
         item.category.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-gray-900">
+                <div className="text-white text-xl">Chargement de la tier list...</div>
+            </div>
+        );
+    }
+
     return (
         <DndContext
             sensors={sensors}
@@ -288,17 +319,13 @@ const TierListPage = () => {
             modifiers={[restrictToWindowEdges]}
         >
             <div className="min-h-screen bg-gray-900">
-                <div className="bg-gray-800 shadow-lg sticky top-0 z-50">
+                <div className="bg-gray-800 shadow-lg sticky top-0">
                     <div className="container mx-auto px-4 py-4">
                         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                             <div className="flex-1">
-                                <input
-                                    type="text"
-                                    value={tierListTitle}
-                                    onChange={(e) => setTierListTitle(e.target.value)}
-                                    className="text-2xl font-bold bg-transparent border-none focus:outline-none text-white w-full"
-                                    placeholder="Nommez votre tier list..."
-                                />
+                                <h2 className="text-2xl font-bold bg-transparent border-none focus:outline-none text-white w-full">
+                                    {tierListTitle}
+                                </h2>
                             </div>
                             <div className="flex space-x-3">
                                 <button onClick={handleSave} className="btn btn-primary btn-sm">

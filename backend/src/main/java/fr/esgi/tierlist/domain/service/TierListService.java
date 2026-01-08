@@ -30,20 +30,20 @@ public class TierListService {
         tierList.setColumns(List.of());
         tierList.setLogos(List.of());
 
-        tierListDatasourcePort.save(tierList);
+        TierList savedTierList = tierListDatasourcePort.save(tierList);
 
-        List<Column> columns = columnService.createAll(tierListform.getColumns(), tierList);
-        tierList.setColumns(columns);
+        List<Column> columns = columnService.createAll(tierListform.getColumns(), savedTierList);
+        savedTierList.setColumns(columns);
 
         List<Logo> logos = logoService.getOrCreateAll(tierListform.getLogos());
-        tierList.setLogos(logos);
+        savedTierList.setLogos(logos);
 
         if (tierListform.getCategoryId() != null) {
             Category category = categoryService.findById(tierListform.getCategoryId());
-            tierList.setCategory(category);
+            savedTierList.setCategory(category);
         }
 
-        return tierListDatasourcePort.save(tierList);
+        return tierListDatasourcePort.save(savedTierList);
     }
 
     public List<TierList> findAll() {

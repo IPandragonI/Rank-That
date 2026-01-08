@@ -16,8 +16,6 @@ const Header = () => {
         navigate("/");
     };
 
-    console.log(currentUser);
-
     const navLinks = [
         {path: "/tierlist/explore", label: "Explore", icon: <FaChartBar/>},
         {path: "/tierlist/new", label: "Create", icon: <FaPlus/>},
