@@ -27,6 +27,10 @@ public class TierListService {
         TierList tierList = new TierList();
         tierList.setName(tierListform.getName());
         tierList.setCreator(authenticationFacade.getCurrentUser());
+        tierList.setColumns(List.of());
+        tierList.setLogos(List.of());
+
+        tierListDatasourcePort.save(tierList);
 
         List<Column> columns = columnService.createAll(tierListform.getColumns(), tierList);
         tierList.setColumns(columns);

@@ -45,7 +45,7 @@ public class TierListEntity {
     private List<LogoEntity> logos;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     private CategoryEntity category;
 
     @Column(name = "created_at", nullable = false, updatable = false)
