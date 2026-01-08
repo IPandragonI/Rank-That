@@ -34,6 +34,11 @@ public class LogoService {
             return existingLogo.get();
         }
 
+        List<Logo> existingLogoByName = logoDatasourcePort.findByName(normalizedDomain);
+        if (!existingLogoByName.isEmpty()) {
+            return existingLogoByName.getFirst();
+        }
+
         InputStream logoStream = logoProviderPort.fetchLogoByDomain(normalizedDomain)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Logo not found for domain: " + normalizedDomain));

@@ -65,8 +65,8 @@ public class TierListService {
         return tierListDatasourcePort.findById(id).orElse(null);
     }
 
-    public TierList findByCreatorId(Long creatorId) {
-        return tierListDatasourcePort.findByCreatorId(creatorId).orElse(null);
+    public List<TierList> findByCreatorId(Long creatorId) {
+        return tierListDatasourcePort.findByCreatorId(creatorId);
     }
 
     public List<TierList> findByCategoryId(Long categoryId) {

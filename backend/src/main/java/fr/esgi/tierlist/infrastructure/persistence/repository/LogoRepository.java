@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LogoRepository extends JpaRepository<LogoEntity, Long> {
+    List<LogoEntity> findByName(String name);
     Optional<LogoEntity> findByDomain(String domain);
     List<LogoEntity> findByDomainContainingIgnoreCase(String domainPattern);
     boolean existsByDomain(String domain);

@@ -45,9 +45,9 @@ public class TierListController {
     @GetMapping("/creator/{creatorId}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Find Tier List by user ID")
-    public TierListDto findByCreatorId(@PathVariable Long creatorId) {
-        TierList tierList = tierListService.findByCreatorId(creatorId);
-        return TierListDto.transfer(tierList);
+    public List<TierListDto> findByCreatorId(@PathVariable Long creatorId) {
+        List<TierList> tierLists = tierListService.findByCreatorId(creatorId);
+        return tierLists.stream().map(TierListDto::transfer).toList();
     }
 
     @GetMapping("/category/{categoryId}")

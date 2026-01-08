@@ -25,6 +25,14 @@ public class LogoJpaAdapter implements LogoDatasourcePort {
     }
 
     @Override
+    public List<Logo> findByName(String name) {
+        return logoRepository.findByName(name)
+                .stream()
+                .map(LogoMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Optional<Logo> findByDomain(String domain) {
         return logoRepository.findByDomain(domain).map(LogoMapper::toDomain);
     }

@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TierListRepository extends JpaRepository<TierListEntity, Long> {
-    Optional<TierListEntity> findByCreatorId(Long creatorId);
+    List<TierListEntity> findByCreatorId(Long creatorId);
     List<TierListEntity> findByCategoryId(Long categoryId);
 }

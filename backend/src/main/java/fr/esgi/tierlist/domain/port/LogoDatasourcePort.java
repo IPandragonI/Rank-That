@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface LogoDatasourcePort {
     Logo save(Logo logo);
     Optional<Logo> findById(Long id);
+    List<Logo> findByName(String name);
     Optional<Logo> findByDomain(String domain);
     List<Logo> findByDomainLike(String domainPattern);
     List<Logo> findAll();
