@@ -9,5 +9,6 @@ public interface TierListLogoMoveDatasourcePort {
     Optional<TierListLogoMove> findById(Long id);
     TierListLogoMove save(TierListLogoMove tierListLogoMove);
     List<TierListLogoMove> findAllByTierListId(Long tierListId);
+    Optional<TierListLogoMove> findByTierListIdAndLogoId(Long tierListId, Long logoId);
     void deleteById(Long id);
 }

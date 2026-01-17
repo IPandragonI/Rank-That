@@ -22,9 +22,19 @@ public class TierListLogoMoveController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Move a Logo to a Tier List")
-    public TierListLogoMoveDto create(@RequestBody TierListLogoMoveForm tierListLogoMoveForm) {
-        TierListLogoMove move = tierListLogoMoveService.create(tierListLogoMoveForm);
+    public TierListLogoMoveDto createOrUpdate(@RequestBody TierListLogoMoveForm tierListLogoMoveForm) {
+        TierListLogoMove move = tierListLogoMoveService.createOrUpdate(tierListLogoMoveForm);
         return TierListLogoMoveDto.transfer(move);
+    }
+
+    @GetMapping("/tierlist/{tierlistId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get all Logo Moves by Tier List ID")
+    public List<TierListLogoMoveDto> findAllByTierListId(@PathVariable Long tierlistId) {
+        List<TierListLogoMove> moves = tierListLogoMoveService.findAllByTierListId(tierlistId);
+        return moves.stream()
+                .map(TierListLogoMoveDto::transfer)
+                .toList();
     }
 
     @PostMapping("/export/{tierlistId}")
