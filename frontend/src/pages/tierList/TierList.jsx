@@ -184,7 +184,7 @@ const TierListPage = () => {
         const activeIdStr = active.id.toString();
         const overId = over.id.toString();
 
-        if (activeIdStr.startsWith('gallery-') && overId.match(/^[sabcdef]$/)) {
+        if (activeIdStr.startsWith('gallery-')) {
             const itemId = parseInt(activeIdStr.replace('gallery-', ''));
             const galleryItem = galleryItems.find(item => item.id === itemId);
 
@@ -200,7 +200,7 @@ const TierListPage = () => {
                 saveLogoMove(galleryItem.id, overId);
             }
         }
-        else if (!activeIdStr.startsWith('gallery-') && overId.match(/^[sabcdef]$/)) {
+        else if (!activeIdStr.startsWith('gallery-')) {
             let sourceTierId = null;
             let draggedItem = null;
 
